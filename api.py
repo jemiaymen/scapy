@@ -67,7 +67,7 @@ def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1234 ,show_pkt=Fal
 
     sendp(pkt,iface=iface,verbose=show_pkt)
 
-def encapsulate(pkt,iface='eth0',src = '127.0.0.1',dst='127.0.0.2',ether='ee:ee:ee:ee:ee:ee'):
+def encapsulate(pkt,iface='eth0',src = '127.0.0.1',dst='127.0.0.2'):
     
     pkt = change_ip(pkt,src,dst)
 
