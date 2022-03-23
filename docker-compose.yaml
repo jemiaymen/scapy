@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+  pod1:
+    image : jemiaymen/pod1
+    container_name: sender
+    environment:
+      - GET_HOSTS_FROM=dns
+
+  pod2:
+    image: jemiaymen/pod2
+    container_name: ingress
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1
+  pod3:
+    image: jemiaymen/pod3
+    container_name: uplink
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1
+
+  pod4:
+    image: jemiaymen/pod4
+    container_name: downlink
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1
+  
+  pod5:
+    image: jemiaymen/pod5
+    container_name: qos
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1
+  
+  pod6:
+    image: jemiaymen/pod6
+    container_name: usage accounting
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1
+  
+  pod7:
+    image: jemiaymen/pod7
+    container_name: lawfull intercept
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1
+  
+  pod8:
+    image: jemiaymen/pod8
+    container_name: egress
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1
+  pod9:
+    image: jemiaymen/pod9
+    container_name: receiver
+    environment:
+      - GET_HOSTS_FROM=dns
+    labels:
+      kompose.service.type: LoadBalancer
+    depends_on:
+     - pod1

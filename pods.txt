@@ -1,0 +1,24 @@
+pod1 : sender| nafs script ama yab3eth packet bark
+pod2 : ingress|
+pod3 , pod4 , pod5 , pod6 , pod7 :  | script ta3 anou yjih packet ya3mel sleep w yab3eth lil ba3dou (pod4 => pod5 , pod5 => pod7 ...)
+
+Pod1: Sender 
+Pod2: Ingress
+Pod3: Uplink handling 
+Pod4: Downlink handling
+Pod5: Qos 
+Pod6: Usage accounting
+Pod7: Lawfull intercept 
+Pod8: Egress
+Pod9: Reciever 
+
+pod 3-7: Skript to recieve a paket sleep for 5 sec than send the paket to the next pod 
+
+pod2 : uncapsulation (add ip header
+
+pdd8: decapsulation remove ip header and ethernet header
+
+Po2: Ingress : pod recieves the packet from sender and add an IP header + ethernet header to the paket tham send it (random) print before and send to 
+
+
+pod1 => pod2 => pod3 or pod4 => (pod4 , pod5 , pod

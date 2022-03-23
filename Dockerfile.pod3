@@ -1,0 +1,6 @@
+FROM jemiaymen/scapy:2.4
+
+WORKDIR /app
+COPY api.py /app/api.py
+COPY pod3_uplink.py /app/pod.py
+CMD [ "python" ,"/app/pod.py" ]
