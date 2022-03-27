@@ -7,32 +7,6 @@ from scapy.all import *
 from scapy.layers.l2 import *
 from scapy.layers.inet import *
 
-
-class OuterEther(Packet):
-    name = "OuterEther"
-    fields_desc = [
-        StrField("name","Ether"),
-        ShortField("number",1)
-    ]
-    
-    def do_dissect_payload(self, s):
-        cls = self.guess_payload_class(s)
-        p = cls(s, _internal=1, _underlayer=self)
-        self.add_payload(p)
-
-class OuterIP(Packet):
-    
-    name = "OuterIP"
-    fields_desc = [
-        StrField("name","IP"),
-        ShortField("number",2)
-    ]
-
-    def do_dissect_payload(self, s):
-        cls = self.guess_payload_class(s)
-        p = cls(s, _internal=1, _underlayer=self)
-        self.add_payload(p)
-
 def handle_pkt(pkt,debug=True):
 
     if TCP in pkt :
@@ -47,7 +21,7 @@ def handle_pkt(pkt,debug=True):
             pkt.show()
             sys.stdout.flush()
 
-def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1111 ,show_pkt=False):
+def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1234 ,show_pkt=False):
     
     if(iface not in get_if_list()):
         print(' [{0}] inteface not found .'.format(iface))
@@ -66,14 +40,40 @@ def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1111 ,show_pkt=Fal
 
     sendp(pkt,iface=iface,verbose=show_pkt)
 
-def encapsulate(pkt,iface='eth0',dst = '127.0.0.1'):
+def encapsulate(pkt,iface='eth0',dst = '127.0.0.1',dport=1234):
     
-    pkt = change_ip(pkt,dst)
+    if(iface not in get_if_list()):
+        print(' [{0}] inteface not found .'.format(iface))
+        print('list of interfaces :',get_if_list())
+        return 
 
-    e = OuterEther(name="encap ether")
-    i = OuterIP(name="encap ip")
+    sport = random.randint(49152,65535)
+    to = socket.gethostbyname(dst)
 
-    return  pkt / OuterEther() / OuterIP() 
+    pkt_with_header = Ether(src=get_if_hwaddr(iface),dst='ff:ff:ff:ff:ff:ff') /IP(dst=to) / TCP(dport=dport , sport=sport )  / pkt
+
+
+    print('\n')
+    print('**************** encap *************')
+    print('\n')
+
+    print('\n')
+    print('----------- old packet ------------')
+    print('\n')
+
+    pkt.show()
+
+
+    print('\n')
+    print('----------- new packet (encapsulate) ------------')
+    print('\n')
+
+    pkt_with_header.show()
+
+
+    print('Sending packet to next pod')
+
+    sendp(pkt_with_header,iface=iface,verbose=True)
 
 def change_ip(pkt,dst):
 
@@ -82,8 +82,58 @@ def change_ip(pkt,dst):
     del pkt.getlayer(1).chksum
     return pkt
 
-def decapsulate(pkt):
-    pkt.getlayer(3).remove_payload()
-    return pkt
+def decapsulate(pkt,iface='eth0',dst='127.0.0.1'):
+
+    print('\n')
+    print('**************** decap *************')
+    print('\n')
 
 
+    print('\n')
+    print('----------- old packet ------------')
+    print('\n')
+
+    pkt.show()
+
+
+    print('\n')
+    print('----------- new packet (decapsulate) ------------')
+    print('\n')
+
+    
+    old_pkt = pkt.getlayer(3)
+
+    print('\n')
+    print('----------- new packet with raw layer ------------')
+    print('\n')
+
+    old_pkt.show()
+
+    old_pkt2 = Ether(old_pkt[Raw].load)  
+
+    print('\n')
+    print('----------- new packet ------------')
+    print('\n')
+
+    old_pkt2.show()
+
+
+    print('\n')
+    print('----------- change ip for pkt ------------')
+    print('\n')
+
+
+    pkt2 = change_ip(old_pkt2,dst)
+
+    pkt2.show()
+    
+    print('Sending packet to receiver')
+
+    sendp(pkt,iface=iface,verbose=True)
+
+def get_pkt(dport=1234,dst='127.0.0.1'):
+    while(True):
+        pkts = sniff(count=1,filter="tcp and port {0}".format(dport) )
+        if TCP in pkts[0] and pkts[0][TCP].dport == 1234 and str(pkts[0][IP].dst) == dst :
+            break
+    return pkts[0]

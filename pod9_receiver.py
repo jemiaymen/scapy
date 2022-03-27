@@ -11,6 +11,6 @@ print('\n')
 print("sniffing on %s" % iface)
 
 
-sniff(filter="tcp and port 1117" , prn = lambda x: handle_pkt(x))
+sniff(filter="tcp and port 1234" , prn = lambda x: handle_pkt(x))
 
 

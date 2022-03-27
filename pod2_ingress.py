@@ -1,35 +1,28 @@
-from api import encapsulate, handle_pkt, sniff,sendp ,sleep
+from api import encapsulate, handle_pkt, sniff,sleep,TCP,get_pkt
 
 
 
 
-while (True):
-    print('\n')
-    print('----------- receive pkt with scapy ------------')
-    print('\n')
-    iface = 'eth0'
+print('\n')
+print('----------- receive pkt with scapy ------------')
+print('\n')
+iface = 'eth0'
 
 
-    print('\n')
-    print("sniffing on %s" % iface)
+print('\n')
+print("sniffing on %s" % iface)
+
+pkt = get_pkt(dport=1234 , dst = '172.17.0.3')
 
 
-    pkts = sniff(count=1,filter="tcp and port 1111" , prn = lambda x: handle_pkt(x))
+print('\n')
+print('----------- encapsulate pkt ------------')
+print('\n')
 
 
-    print('\n')
-    print('----------- encapsulate pkt ------------')
-    print('\n')
+encapsulate(pkt,iface=iface,dst='172.17.0.4')
 
-    pkt = pkts[0]
-
-    pkt = encapsulate(pkt,iface=iface,dst='10.244.1.25')
-
-    pkt.getlayer(2).dport = 1112
-
-    pkt.show()
-
-    sendp(pkt,iface=iface,verbose=True)
+while(True):
     sleep(15)
 
 
