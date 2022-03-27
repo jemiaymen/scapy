@@ -33,22 +33,21 @@ class OuterIP(Packet):
         p = cls(s, _internal=1, _underlayer=self)
         self.add_payload(p)
 
-def handle_pkt(pkt,port=1234,debug=False):
+def handle_pkt(pkt,debug=True):
 
-    if TCP in pkt and pkt[TCP].dport == port:
+    if TCP in pkt :
 
         if(debug):
-
-            print("I got a Package in port {0}".format(port))
-            pkt.show2()
+            print("I got a Package in port ")
+            pkt.show()
 
             sys.stdout.flush()
         else:
 
-            pkt.show2()
+            pkt.show()
             sys.stdout.flush()
 
-def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1234 ,show_pkt=False):
+def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1111 ,show_pkt=False):
     
     if(iface not in get_if_list()):
         print(' [{0}] inteface not found .'.format(iface))
@@ -67,19 +66,20 @@ def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1234 ,show_pkt=Fal
 
     sendp(pkt,iface=iface,verbose=show_pkt)
 
-def encapsulate(pkt,iface='eth0',src = '127.0.0.1',dst='127.0.0.2'):
+def encapsulate(pkt,iface='eth0',dst = '127.0.0.1'):
     
-    pkt = change_ip(pkt,src,dst)
+    pkt = change_ip(pkt,dst)
 
     e = OuterEther(name="encap ether")
     i = OuterIP(name="encap ip")
 
     return  pkt / OuterEther() / OuterIP() 
 
-def change_ip(pkt,src,dst):
-    pkt[IP].src = src
-    pkt[IP].dst = dst
-    del pkt[IP].chksum
+def change_ip(pkt,dst):
+
+    d = socket.gethostbyname(dst)
+    pkt.getlayer(1).dst = d
+    del pkt.getlayer(1).chksum
     return pkt
 
 def decapsulate(pkt):

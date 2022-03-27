@@ -29,7 +29,7 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod3
+          image: myriamtrad/scapy-pod3
           name: uplink
           resources: {}
       restartPolicy: Always

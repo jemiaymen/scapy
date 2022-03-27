@@ -3,5 +3,5 @@ from api import send,sleep
 
 
 while (True):
-    sleep(5)
-    send(iface='wlp0s20f3',msg='up senario',show_pkt=True)
+    sleep(15)
+    send(iface='eth0',msg='uplink Handling case',show_pkt=True , dst='10.244.1.23')

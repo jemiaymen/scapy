@@ -1,41 +1,35 @@
-from api import encapsulate,decapsulate, handle_pkt,sys, sniff,sendp , send
+from api import encapsulate, handle_pkt, sniff,sendp ,sleep
 
 
-print('\n')
-print('----------- receive pkt with scapy ------------')
-print('\n')
-iface = 'wlp0s20f3'
 
 
-print('\n')
-print("sniffing on %s" % iface)
+while (True):
+    print('\n')
+    print('----------- receive pkt with scapy ------------')
+    print('\n')
+    iface = 'eth0'
 
 
-pkts = sniff(count=1,filter="tcp and port 1234" , prn = lambda x: handle_pkt(x))
+    print('\n')
+    print("sniffing on %s" % iface)
 
 
-print('\n')
-print('----------- encapsulate pkt ------------')
-print('\n')
-
-pkt = pkts[0]
+    pkts = sniff(count=1,filter="tcp and port 1111" , prn = lambda x: handle_pkt(x))
 
 
-pkt = encapsulate(pkt,iface=iface,dst='127.0.0.2')
+    print('\n')
+    print('----------- encapsulate pkt ------------')
+    print('\n')
 
+    pkt = pkts[0]
 
-pkt.show()
+    pkt = encapsulate(pkt,iface=iface,dst='10.244.1.25')
 
+    pkt.getlayer(2).dport = 1112
 
-pkt1 = decapsulate(pkt)
+    pkt.show()
 
-pkt1.show()
-
-
-# send to pod 3 or pod 4
-
-# send(iface=iface,dst='10.10.10.12',msg ="next message",dport=1333,show_pkt=True)
-
-sendp(pkt,iface=iface,verbose=True)
+    sendp(pkt,iface=iface,verbose=True)
+    sleep(15)
 
 

@@ -29,7 +29,7 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod4
+          image: myriamtrad/scapy-pod4
           name: downlink
           resources: {}
       restartPolicy: Always

@@ -27,7 +27,7 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod1
+          image: myriamtrad/scapy-pod1
           name: sender
           resources: {}
       restartPolicy: Always

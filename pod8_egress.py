@@ -1,17 +1,17 @@
-from api import handle_pkt,sys, sniff , sleep ,send,decapsulate
+from api import handle_pkt,sniff , sleep ,change_ip , sendp ,decapsulate
 
 
 print('\n')
 print('----------- receive pkt with scapy ------------')
 print('\n')
-iface = 'wlp0s20f3'
+iface = 'eth0'
 
 
 print('\n')
 print("sniffing on %s" % iface)
 
 
-pkts = sniff(count=1,filter="tcp and port 1234" , prn = lambda x: handle_pkt(x))
+pkts = sniff(count=1,filter="tcp and port 1116" , prn = lambda x: handle_pkt(x))
 
 
 print('\n')
@@ -22,7 +22,31 @@ sleep(5)
 
 pkt = pkts[0]
 
-pkt = decapsulate(pkt)
+pkt1 = change_ip(pkt, pkt[IP].src  ,'15.145.21.15')
 
-# send to pod 9 qos
-send(iface=iface,dst='10.10.10.10',msg ="next message",dport=1234,show_pkt=True)
+pkt1.show()
+
+print('\n')
+print('----------- decapsulate ------------')
+print('\n')
+
+pkt2 = decapsulate(pkt1)
+
+pkt2.show()
+
+
+print('\n')
+print('----------- change ip to pod9 ------------')
+print('\n')
+
+pkt2 = change_ip(pkt2,dst='10.244.1.30')
+
+pkt2[TCP].dport = 1117
+
+pkt2.show()
+
+sendp(pkt,iface=iface,verbose=True)
+
+
+while (True):
+    sleep(5)

@@ -29,8 +29,8 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod6
-          name: usage accounting
+          image: myriamtrad/scapy-pod6
+          name: usage-accounting
           resources: {}
       restartPolicy: Always
 status: {}

@@ -29,7 +29,7 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod8
+          image: myriamtrad/scapy-pod8
           name: egress
           resources: {}
       restartPolicy: Always

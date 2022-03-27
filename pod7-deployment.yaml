@@ -29,8 +29,8 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod7
-          name: lawfull intercept
+          image: myriamtrad/scapy-pod7
+          name: lawfull-intercept
           resources: {}
       restartPolicy: Always
 status: {}

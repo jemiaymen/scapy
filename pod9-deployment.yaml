@@ -29,7 +29,7 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod9
+          image: myriamtrad/scapy-pod9
           name: receiver
           resources: {}
       restartPolicy: Always

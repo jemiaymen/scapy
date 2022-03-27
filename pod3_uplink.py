@@ -1,28 +1,36 @@
-from api import handle_pkt,sys, sniff , sleep ,send
+from api import handle_pkt,sniff , sleep ,change_ip , sendp
 
 
-print('\n')
-print('----------- receive pkt with scapy ------------')
-print('\n')
-iface = 'wlp0s20f3'
 
 
-print('\n')
-print("sniffing on %s" % iface)
+while (True):
+    print('\n')
+    print('----------- receive pkt with scapy ------------')
+    print('\n')
+    iface = 'eth0'
 
 
-pkts = sniff(count=1,filter="tcp and port 1234" , prn = lambda x: handle_pkt(x))
+    print('\n')
+    print("sniffing on %s" % iface)
 
 
-print('\n')
-print('----------- sleep for 5 sec ------------')
-print('\n')
+    pkts = sniff(count=1,filter="tcp and port 1112" , prn = lambda x: handle_pkt(x))
 
-sleep(5)
 
-pkt = pkts[0]
+    print('\n')
+    print('----------- sleep for 5 sec ------------')
+    print('\n')
 
-# send to pod 5 qos
-send(iface=iface,dst='10.10.10.10',msg ="next message",dport=1333,show_pkt=True)
+    sleep(5)
+
+    pkt = pkts[0]
+
+    pkt1 = change_ip(pkt,'10.244.1.26')
+    pkt.getlayer(2).dport = 1113
+    pkt1.show()
+
+    sendp(pkt,iface=iface,verbose=True)
+    sleep(15)
+
 
 

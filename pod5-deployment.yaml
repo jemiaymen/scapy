@@ -29,7 +29,7 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod5
+          image: myriamtrad/scapy-pod5
           name: qos
           resources: {}
       restartPolicy: Always
