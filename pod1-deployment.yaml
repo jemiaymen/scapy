@@ -8,6 +8,7 @@ metadata:
   labels:
     io.kompose.service: pod1
   name: pod1
+  
 spec:
   replicas: 1
   selector:
@@ -27,7 +28,21 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
           image: myriamtrad/scapy-pod1
+          imagePullPolicy: Always
           name: sender
           resources: {}
       restartPolicy: Always

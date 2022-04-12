@@ -1,9 +1,8 @@
-from api import send,sleep
 
+from api import send,sleep,get_next_pod_ip
 
-sleep(5)
-send(iface='eth0',msg='Hello word',show_pkt=True , dst='172.17.0.3')
-
+i = 1
 while (True):
-    sleep(15)
-    
+    sleep(10)
+    send(iface='eth0',msg='Hello word ( {0} )'.format(i),show_pkt=True , dst=get_next_pod_ip())
+    i += 1

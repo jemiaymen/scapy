@@ -1,25 +1,17 @@
 import random
 import socket
 from time import sleep
-import sys
+import sys,os
 
 from scapy.all import *
 from scapy.layers.l2 import *
 from scapy.layers.inet import *
 
-def handle_pkt(pkt,debug=True):
+def handle_pkt(pkt,dst='127.0.0.1'):
+    if TCP in pkt and pkt[TCP].dport == 1234 and str(pkt[IP].dst) == dst :
+        pkt.show2()
+        sys.stdout.flush()
 
-    if TCP in pkt :
-
-        if(debug):
-            print("I got a Package in port ")
-            pkt.show()
-
-            sys.stdout.flush()
-        else:
-
-            pkt.show()
-            sys.stdout.flush()
 
 def send(iface='eth0',dst='127.0.0.1',msg='Hello World',dport=1234 ,show_pkt=False):
     
@@ -75,19 +67,17 @@ def encapsulate(pkt,iface='eth0',dst = '127.0.0.1',dport=1234):
 
     sendp(pkt_with_header,iface=iface,verbose=True)
 
-def change_ip(pkt,dst):
+def change_ip(pkt,dst,dport=1234):
 
+    sport = random.randint(49152,65535)
     d = socket.gethostbyname(dst)
     pkt.getlayer(1).dst = d
-    del pkt.getlayer(1).chksum
+    pkt.getlayer(2).dport = dport
+    pkt.getlayer(2).sport = sport
+
     return pkt
 
 def decapsulate(pkt,iface='eth0',dst='127.0.0.1'):
-
-    print('\n')
-    print('**************** decap *************')
-    print('\n')
-
 
     print('\n')
     print('----------- old packet ------------')
@@ -103,33 +93,40 @@ def decapsulate(pkt,iface='eth0',dst='127.0.0.1'):
     
     old_pkt = pkt.getlayer(3)
 
-    print('\n')
-    print('----------- new packet with raw layer ------------')
-    print('\n')
+    n_pkt = Ether(old_pkt[Raw].load)  
 
-    old_pkt.show()
+    n_pkt.show()
 
-    old_pkt2 = Ether(old_pkt[Raw].load)  
+    data = n_pkt[Raw].load
 
-    print('\n')
-    print('----------- new packet ------------')
-    print('\n')
+    send(iface=iface,dst=dst,msg = data , show_pkt=True )
 
-    old_pkt2.show()
+    # sport = random.randint(49152,65535)
+    # d = socket.gethostbyname(dst)
+    # n_pkt['IP'].dst = d
+    # n_pkt['TCP'].dport = 1234
+    # n_pkt['TCP'].sport = sport
+
+    # del n_pkt['IP'].len
+    # del n_pkt['IP'].chksum
+    # del n_pkt['TCP'].chksum
+    # del n_pkt['IP'].len
+
+    # pkt2 = Ether(n_pkt.build())
+
+    # pkt2.show()
 
 
-    print('\n')
-    print('----------- change ip for pkt ------------')
-    print('\n')
 
-
-    pkt2 = change_ip(old_pkt2,dst)
-
-    pkt2.show()
+    # n_pkt = Ether(src=get_if_hwaddr(iface),dst='ff:ff:ff:ff:ff:ff') /IP(dst=d) / TCP(dport=1234 , sport=sport ) / pkt2[Raw].load
     
-    print('Sending packet to receiver')
+    # n_pkt.show()
 
-    sendp(pkt,iface=iface,verbose=True)
+    # print('Sending packet to receiver')
+
+    # sendp(n_pkt,iface=iface,verbose=True)
+
+    # sr(n_pkt,iface=iface)
 
 def get_pkt(dport=1234,dst='127.0.0.1'):
     while(True):
@@ -137,3 +134,13 @@ def get_pkt(dport=1234,dst='127.0.0.1'):
         if TCP in pkts[0] and pkts[0][TCP].dport == 1234 and str(pkts[0][IP].dst) == dst :
             break
     return pkts[0]
+
+def get_current_pod_ip():
+    return socket.gethostbyname(socket.gethostname())
+
+def get_next_pod_ip():
+    old_ip = get_current_pod_ip()
+    numbers = old_ip.split('.')
+    last = int(numbers[3])
+    last += 1
+    return '{0}.{1}.{2}.{3}'.format(numbers[0],numbers[1],numbers[2],last)

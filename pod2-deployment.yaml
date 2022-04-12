@@ -21,6 +21,7 @@ spec:
         kompose.cmd: kompose convert
         kompose.service.type: LoadBalancer
         kompose.version: 1.26.1 (a9d05d509)
+        "cni.projectcalico.org/ipAddrs": "[\"10.244.120.77\"]"
       creationTimestamp: null
       labels:
         io.kompose.service: pod2
@@ -29,7 +30,8 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: myriamtrad/scapy-pod2
+          image: jemiaymen/pod2
+          imagePullPolicy: Never
           name: ingress
           resources: {}
       restartPolicy: Always

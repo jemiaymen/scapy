@@ -1,29 +1,14 @@
-from api import handle_pkt,sniff , sleep , get_pkt ,decapsulate
+from api import sleep , get_pkt ,decapsulate ,get_current_pod_ip,get_next_pod_ip
 
 
-print('\n')
-print('----------- receive pkt with scapy ------------')
-print('\n')
-iface = 'eth0'
-
-
-print('\n')
-print("sniffing on %s" % iface)
-
-
-pkt = get_pkt(dst='172.17.0.4')
-
-
-print('\n')
-print('----------- sleep for 5 sec ------------')
-print('\n')
-
-sleep(5)
-
-
-
-
-decapsulate(pkt,iface,'172.17.0.5')
 
 while (True):
-    sleep(5)
+    sleep(10)
+
+    iface = 'eth0'
+
+
+    pkt = get_pkt(dst=get_current_pod_ip())
+
+
+    decapsulate(pkt,iface,get_next_pod_ip())

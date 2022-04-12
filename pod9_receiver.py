@@ -1,16 +1,10 @@
-from api import handle_pkt, sniff 
+from api import sniff,handle_pkt,get_current_pod_ip
 
 
-print('\n')
-print('----------- receive pkt with scapy ------------')
-print('\n')
 iface = 'eth0'
+pod_ip = get_current_pod_ip()
 
+print(pod_ip)
 
-print('\n')
-print("sniffing on %s" % iface)
-
-
-sniff(filter="tcp and port 1234" , prn = lambda x: handle_pkt(x))
-
+sniff(filter="tcp and port 1234" ,iface = iface, prn = lambda x: handle_pkt(x,pod_ip))
 
