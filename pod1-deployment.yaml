@@ -20,6 +20,8 @@ spec:
       annotations:
         kompose.cmd: kompose convert
         kompose.version: 1.26.1 (a9d05d509)
+        kompose.service.type: LoadBalancer
+        "cni.projectcalico.org/ipAddrs": "[\"10.244.246.129\"]"
       creationTimestamp: null
       labels:
         io.kompose.service: pod1
