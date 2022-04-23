@@ -28,6 +28,7 @@ def send(iface='eth0',dst='127.0.0.1',payload=None,dport=60000 ,show_pkt=False):
 
     if(show_pkt):
         pkt.show2()
+        sys.stdout.flush()
 
     sendp(pkt,iface=iface,verbose=show_pkt)
 
@@ -53,6 +54,7 @@ def encapsulate(pkt,iface='eth0',dst = '127.0.0.1',dport=60000):
     print('\n')
 
     pkt.show()
+    sys.stdout.flush()
 
 
     print('\n')
@@ -60,21 +62,22 @@ def encapsulate(pkt,iface='eth0',dst = '127.0.0.1',dport=60000):
     print('\n')
 
     pkt_with_header.show()
+    sys.stdout.flush()
 
 
     print('Sending packet to next pod')
 
     sendp(pkt_with_header,iface=iface,verbose=True)
 
-def change_ip(pkt,dst,dport=60000):
+# def change_ip(pkt,dst,dport=60000):
 
-    sport = random.randint(49152,65535)
-    d = socket.gethostbyname(dst)
-    pkt.getlayer(1).dst = d
-    pkt.getlayer(2).dport = dport
-    pkt.getlayer(2).sport = sport
+#     sport = random.randint(49152,65535)
+#     d = socket.gethostbyname(dst)
+#     pkt.getlayer(1).dst = d
+#     pkt.getlayer(2).dport = dport
+#     pkt.getlayer(2).sport = sport
 
-    return pkt
+#     return pkt
 
 def decapsulate(pkt,iface='eth0',dst='127.0.0.1',times=3):
 
@@ -83,6 +86,7 @@ def decapsulate(pkt,iface='eth0',dst='127.0.0.1',times=3):
     print('\n')
 
     pkt.show()
+    sys.stdout.flush()
 
 
     print('\n')
@@ -129,11 +133,12 @@ def decapsulate(pkt,iface='eth0',dst='127.0.0.1',times=3):
     # sr(n_pkt,iface=iface)
 
 def get_pkt(dport=60000,dst='127.0.0.1'):
-    while(True):
+    while (True):
         pkts = sniff(count=1,filter="tcp and port {0}".format(dport) )
         if TCP in pkts[0] and pkts[0][TCP].dport == 60000 and str(pkts[0][IP].dst) == dst :
-            break
-    return pkts[0]
+            return pkts[0]
+
+
 
 def get_current_pod_ip():
     return socket.gethostbyname(socket.gethostname())
@@ -158,5 +163,6 @@ def decap(pkt,show_pkt=False):
 
     if(show_pkt):
         n_pkt.show()
+        sys.stdout.flush()
 
     return n_pkt

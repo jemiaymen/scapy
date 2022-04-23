@@ -19,6 +19,6 @@ while(True):
         
 
     encapsulate(pkt,iface=iface,dst=dst)
-    sleep(1)
+    #sleep(1)
 
 

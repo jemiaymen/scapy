@@ -10,4 +10,4 @@ while (True):
         msg = 'Hello word ({0}) downlink'.format(i)
     send(iface='eth0',payload= msg ,show_pkt=True , dst=get_next_pod_ip())
     i += 1
-    sleep(10)
+    sleep(4)
