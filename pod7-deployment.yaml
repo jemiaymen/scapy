@@ -21,6 +21,7 @@ spec:
         kompose.cmd: kompose convert
         kompose.service.type: LoadBalancer
         kompose.version: 1.26.1 (a9d05d509)
+        "cni.projectcalico.org/ipAddrs": "[\"10.244.246.135\"]"
       creationTimestamp: null
       labels:
         io.kompose.service: pod7
@@ -30,6 +31,7 @@ spec:
             - name: GET_HOSTS_FROM
               value: dns
           image: myriamtrad/scapy-pod7
+          imagePullPolicy: Always
           name: lawfull-intercept
           resources: {}
       restartPolicy: Always

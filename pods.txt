@@ -22,3 +22,6 @@ Po2: Ingress : pod recieves the packet from sender and add an IP header + ethern
 
 
 pod1 => pod2 => pod3 or pod4 => (pod4 , pod5 , pod
+
+etap => koll pod nektboulou el code mta3ou and run 6 and 7 and one up and one Downlink 
+etap => tools for latency and throwput

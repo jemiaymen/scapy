@@ -1,5 +1,0 @@
-FROM jemiaymen/scapy:2.4
-
-WORKDIR /app
-COPY receive.py /app/receive.py
-CMD [ "python" ,"/app/receive.py" ]
