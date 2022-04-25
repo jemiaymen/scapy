@@ -13,7 +13,7 @@ current_pod_ip = '10.244.246.137'
 
 def handle_pkt(pkt):
     if TCP in pkt and pkt[TCP].dport == 60000 and str(pkt[IP].dst) == current_pod_ip :
-        pkt.show2()
+        pkt.show()
         sys.stdout.flush()
         
 
