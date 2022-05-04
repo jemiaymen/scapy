@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
 
         print('\n')
-        print('----------- new packet (decapsulate) {0} times ------------'.format(times))
+        print('----------- new packet (decapsulate) {0} times ------------'.format(5))
         print('\n')
         pkts = []
         p = pkt
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         pkt2 = Ether(src=get_if_hwaddr(iface),dst='ee:ee:ee:ee:ee:ee') /IP(dst=to) / TCP(dport=dport , sport=sport ) / data
 
 
-        pkt2.show2()
+        pkt2.show()
         sys.stdout.flush()
 
         sendp(pkt2,iface=iface,verbose=True)

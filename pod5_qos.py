@@ -36,4 +36,4 @@ if __name__ == "__main__":
         pkt2.show2()
         sys.stdout.flush()
 
-        sendp(pkt,iface=iface,verbose=True)
+        sendp(pkt2,iface=iface,verbose=True)

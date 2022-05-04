@@ -33,7 +33,7 @@ if __name__ == "__main__":
         pkt2 = Ether(src=get_if_hwaddr(iface),dst='ee:ee:ee:ee:ee:ee') /IP(dst=to) / TCP(dport=dport , sport=sport ) / pkt
 
 
-        pkt2.show2()
+        pkt2.show()
         sys.stdout.flush()
 
-        sendp(pkt,iface=iface,verbose=True)
+        sendp(pkt2,iface=iface,verbose=True)
