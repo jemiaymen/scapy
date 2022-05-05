@@ -18,21 +18,42 @@ ips = { 'sender' :'10.244.246.129',
 
 sport = random.randint(49152,65535)
 
-to = socket.gethostbyname(ips['ingress'])
+
 
 pkts = []
-for x in range(10):
-    pkt = Ether(src=get_if_hwaddr(iface),dst='ee:ee:ee:ee:ee:ee') /IP(dst=to) / TCP(dport=dport , sport=sport ) / "Test PKT {0}".format(x) 
+
+for x in range(1,101):
+
+    
+    msg = 'Hello word ({0}) uplink'.format(x)
+
+    #from sender to ingress
+    to = socket.gethostbyname(ips['ingress'])
+    pkt = Ether(src=get_if_hwaddr(iface),dst='ee:ee:ee:ee:ee:ee') /IP(dst=to) / TCP(dport=dport , sport=sport ) / msg
+
+    #from ingress to uplink
+    to = socket.gethostbyname(ips['uplink'])
+    pkt_with_header = Ether(src=get_if_hwaddr(iface),dst='ee:ee:ee:ee:ee:ee') /IP(dst=to) / TCP(dport=dport , sport=sport )  / pkt
+
+    #from uplink to receiver
+
+    to = socket.gethostbyname(ips['receiver'])
+    pkt_receiver = Ether(src=get_if_hwaddr(iface),dst='ee:ee:ee:ee:ee:ee') /IP(dst=to) / TCP(dport=dport , sport=sport )  / pkt_with_header
+
     pkts.append(pkt)
+
+    pkts.append(pkt_with_header)
+
+    pkts.append(pkt_receiver)
 
 
 wrpcap("/app/src.pcap",pkts)
 
-tcpreplay_cli = "tcpreplay -i {0} --topspeed /app/src.pcap".format(iface)
+# tcpreplay_cli = "tcpreplay -i {0} --topspeed src.pcap".format(iface)
 
 
 
-tcpreplay = subprocess.Popen(tcpreplay_cli,shell=True)
+# tcpreplay = subprocess.Popen(tcpreplay_cli,shell=True)
 # tcpreplay.wait()
 
 # sleep(0.3)
@@ -45,7 +66,7 @@ def handle_pkt(pkt):
     pkt.show2()
     sys.stdout.flush()
 
-final_pkts = sniff(count=10,filter="tcp and port {0}".format(dport) , prn= lambda x: handle_pkt(x) )
+final_pkts = sniff(count=1000,filter="tcp and port {0}".format(dport) , prn= lambda x: handle_pkt(x) )
 
 wrpcap("/app/dst.pcap",final_pkts)
 

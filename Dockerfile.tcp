@@ -1,5 +1,5 @@
 FROM jemiaymen/scapy:2.4
-RUN apt update && apt install tcpdump tcpreplay
+RUN apt-get update && apt-get install -y tcpdump tcpreplay
 
 WORKDIR /app
 
