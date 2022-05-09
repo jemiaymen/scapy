@@ -49,14 +49,14 @@ for x in range(1,101):
 
 wrpcap("/app/src.pcap",pkts)
 
-# tcpreplay_cli = "tcpreplay -i {0} --topspeed src.pcap".format(iface)
+tcpreplay_cli = "tcpreplay -i {0} --topspeed src.pcap".format(iface)
 
 
 
-# tcpreplay = subprocess.Popen(tcpreplay_cli,shell=True)
-# tcpreplay.wait()
+tcpreplay = subprocess.Popen(tcpreplay_cli,shell=True)
+#tcpreplay.wait()
 
-# sleep(0.3)
+#sleep(0.3)
 
 # tcpdump_cli = "tcpdump -tt -i {0} src host {1} > dst.pcap".format(iface,ips['sender'])
 # tcpdump = subprocess.Popen(tcpdump_cli , shell=True)
@@ -66,7 +66,7 @@ def handle_pkt(pkt):
     pkt.show2()
     sys.stdout.flush()
 
-final_pkts = sniff(count=1000,filter="tcp and port {0}".format(dport) , prn= lambda x: handle_pkt(x) )
+final_pkts = sniff(count=300,filter="tcp and port {0}".format(dport) , prn= lambda x: handle_pkt(x) )
 
 wrpcap("/app/dst.pcap",final_pkts)
 

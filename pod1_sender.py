@@ -11,6 +11,33 @@ iface = 'eth0'
 dport = 60000 
 i = 1
 
+
+dst_ip = '10.244.246.130'
+
+port=60000
+
+src_ip='10.244.246.129'
+
+
+
+def save_packet_one(p):
+    wrpcap('original_captures.pcap', p, append=True)
+
+
+def save_packet_two(p):
+    wrpcap('final_captures.pcap', p, append=True)
+
+
+def sniff_packets(sip,dip,sp,dp):
+    while True:
+        if sys.argv[1].lower()=="o":
+            save_packet_one(sniff(filter="tcp", count=1))
+        else:
+            save_packet_two(sniff(filter="tcp", count=1))
+
+#sniff_packets(src_ip,dst_ip,port,port)
+
+
 #pod2 ip (ingress)
 dst = '10.244.246.130'
 
@@ -25,7 +52,7 @@ if __name__ == "__main__":
         
         while (True):
 
-            sport = random.randint(49152,65535)
+            sport = 60000#random.randint(49152,65535)
             to = socket.gethostbyname(dst)
 
             if( i % 2 == 0):
@@ -40,6 +67,6 @@ if __name__ == "__main__":
             sys.stdout.flush()
 
             sendp(pkt,iface=iface,verbose=True)
-
+            save_packet_one(pkt)
             i += 1
             sleep(4)

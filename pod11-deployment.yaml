@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.service.type: LoadBalancer
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: pod11
+  name: pod11
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: pod11
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.service.type: LoadBalancer
+        kompose.version: 1.26.1 (a9d05d509)
+        "cni.projectcalico.org/ipAddrs": "[\"10.244.246.139\"]"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: pod11
+    spec:
+      containers:
+        - env:
+            - name: GET_HOSTS_FROM
+              value: dns
+          image: jemiaymen/pod11
+          imagePullPolicy: Always
+          name: receiver
+          resources: {}
+      restartPolicy: Always
+status: {}

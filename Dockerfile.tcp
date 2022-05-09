@@ -3,6 +3,6 @@ RUN apt-get update && apt-get install -y tcpdump tcpreplay
 
 WORKDIR /app
 
-COPY tcp_latency /app/tcp_latency
+COPY pcap_latency /app/pcap_latency
 COPY tcpdump_tcpreplay.py /app/pod.py
 CMD [ "python" ,"/app/pod.py" ]
