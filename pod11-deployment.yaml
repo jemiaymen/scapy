@@ -30,9 +30,9 @@ spec:
         - env:
             - name: GET_HOSTS_FROM
               value: dns
-          image: jemiaymen/pod11
+          image: myriamtrad/scapy-pod11
           imagePullPolicy: Always
-          name: receiver
+          name: monitoring
           resources: {}
       restartPolicy: Always
 status: {}
