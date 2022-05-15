@@ -9,6 +9,8 @@ port=60000
 
 src_ip='10.244.246.129'
 
+iface='eth0'
+
 
 
 def save_packet_one(p):
@@ -21,6 +23,6 @@ def save_packet_two(p):
 
 def sniff_packets():
     while True:
-         save_packet_one(sniff(filter="tcp", count=1))
+         save_packet_one(sniff(filter="tcp",iface=iface, count=1))
        
 sniff_packets()

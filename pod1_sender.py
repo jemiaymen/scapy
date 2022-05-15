@@ -1,5 +1,6 @@
 import random
 import socket
+from tabnanny import verbose
 from time import sleep
 import sys
 
@@ -60,8 +61,8 @@ if __name__ == "__main__":
             else:
                 msg = 'Hello word ({0}) downlink'.format(i)
             
-            pkt = Ether(src=get_if_hwaddr(iface),dst='ee:ee:ee:ee:ee:ee') /IP(dst=to) / TCP(dport=dport , sport=sport ) / msg
-
+            pkt = Ether(src=get_if_hwaddr('eth0'),dst='ee:ee:ee:ee:ee:ee') /IP(dst=socket.gethostbyname('10.244.246.130')) / TCP(dport=60000 , sport=60001 ) / "Try sniff"
+            sendp(pkt,iface='eth0',verbose=True)
 
             pkt.show2()
             sys.stdout.flush()

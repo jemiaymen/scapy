@@ -1,0 +1,7 @@
+FROM jemiaymen/scapy:2.4
+
+
+WORKDIR /app
+
+COPY pcap_file.py /app/pcap_file.py
+CMD [ "python" ,"/app/pcap_file.py" ]

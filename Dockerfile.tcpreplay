@@ -1,0 +1,8 @@
+FROM jemiaymen/scapy:2.4
+RUN apt-get update && apt-get install -y tcpreplay
+
+WORKDIR /app
+
+COPY src.pcap /app/src.pcap
+COPY tcpreplay.sh /app/tcpreplay.sh
+CMD [ "sh" ,"/app/tcpreplay.sh" ]
