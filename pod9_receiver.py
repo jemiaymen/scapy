@@ -1,15 +1,15 @@
-import sys
+import sys,os,time
 
 from scapy.all import *
 from scapy.layers.l2 import *
 from scapy.layers.inet import *
 
-iface = 'eth0'
+"""iface = 'eth0'
 dport = 60000 
 
 
 def save_packet_one(p):
-    wrpcap('original_captures.pcap', p, append=True)
+    wrpcap('receiver.pcap', p, append=True)
 
 #pods ip
 current_pod_ip = '10.244.246.137'
@@ -19,7 +19,9 @@ def handle_pkt(pkt):
         pkt.show()
         sys.stdout.flush()
         save_packet_one(pkt)
-
+"""
 if __name__ == "__main__":
-    sniff(filter="tcp and port 60000" ,iface = iface, prn = lambda x: handle_pkt(x))
-
+    os.system('tcpdump -c 10 -w receiver.pcap -i eth0')
+    while 1:
+        time.sleep(1)
+    #sniff(filter="tcp and port 60000" ,iface = iface, prn = lambda x: handle_pkt(x))

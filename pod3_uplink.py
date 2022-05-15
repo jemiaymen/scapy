@@ -13,7 +13,7 @@ dport = 60000
 
 #pods ip
 current_pod_ip = '10.244.246.131'
-qos_ip = '10.244.246.133'
+qos_ip = '10.244.246.137'
 
 
 def get_pkt():
