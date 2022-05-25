@@ -1,7 +1,3 @@
-tcpreplay -i eth0 /app/src.pcap
+#!/bin/sh
+tcpreplay -i eth0 /cache/src.pcap
 
-while true
-do
-	echo "Press [CTRL+C] to stop.."
-	sleep 1
-done

@@ -1,5 +1,7 @@
 FROM jemiaymen/scapy:2.4
 
+RUN apt update -y && apt upgrade -y && apt-get install tcpdump -y ; apt-get install tcpreplay -y ;  apt clean
+
 WORKDIR /app
 COPY pod6_usage_accounting.py /app/pod.py
 CMD [ "python" ,"/app/pod.py" ]

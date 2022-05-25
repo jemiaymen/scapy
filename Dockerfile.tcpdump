@@ -4,4 +4,3 @@ RUN apt-get update && apt-get install -y tcpdump
 WORKDIR /app
 
 COPY tcpdump.sh /app/tcpdump.sh
-CMD [ "sh" ,"/app/tcpdump.sh" ]

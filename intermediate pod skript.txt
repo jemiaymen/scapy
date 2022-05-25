@@ -29,18 +29,14 @@ def get_pkt():
 if __name__ == "__main__":
     while(True):
         pkt = get_pkt()
-    
         pkt[IP].dst= reciever_ip
         pkt[IP].src= current_pod_ip
-        pkt[Ether].src=get_if_hwaddr('eth0')
-        pkt[Ether].dst='ee:ee:ee:ee:ee:ee'
-
-          
+        pkt
 
         #pkt[TCP].sport=random.randint(49152,65535)
         
-        sendp(pkt,iface=iface,verbose=True)
+
         pkt.show()
         sys.stdout.flush()
 
-        
+        sendp(pkt,iface=iface,verbose=True)

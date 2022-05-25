@@ -7,7 +7,11 @@ import time,os
 
 
 def get_data_from_pkt(p):
-	return bytes(p[TCP].payload)
+    try:
+        #print(bytes(p[TCP].payload))
+        return bytes(p[TCP].payload)
+    except:
+        return b''
 
 
 def get_timestamp_from_pkt(p):
@@ -28,8 +32,8 @@ def find_packet_in_pcap(pkt,pkt_load):
 
 
 def analyze():
-    data_sender=read_pcap('sender.pcap')
-    data_receiver=read_pcap('receiver.pcap')
+    data_sender=read_pcap('src.pcap')
+    data_receiver=read_pcap('target.pcap')
     success=0
     for x in data_sender:
         latency=find_packet_in_pcap(x,data_receiver)

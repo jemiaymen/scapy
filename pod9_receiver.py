@@ -21,7 +21,7 @@ def handle_pkt(pkt):
         save_packet_one(pkt)
 """
 if __name__ == "__main__":
-    os.system('tcpdump -c 10 -w receiver.pcap -i eth0')
+    os.system('tcpdump -i eth0 -w receiver.pcap -c 10 dst 10.244.246.137')
     while 1:
         time.sleep(1)
     #sniff(filter="tcp and port 60000" ,iface = iface, prn = lambda x: handle_pkt(x))

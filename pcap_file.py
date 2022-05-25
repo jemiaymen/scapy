@@ -11,7 +11,8 @@ ips = { 'sender' :'10.244.246.129',
         'usage_accounting':'10.244.246.134',
         'lawfull':'10.244.246.135',
         'egress':'10.244.246.136',
-        'receiver':'10.244.246.137' }
+        'receiver':'10.244.246.137',
+        'capture':'10.244.246.139' }
 
 sport = 60001
 
@@ -19,7 +20,7 @@ sport = 60001
 
 pkts = []
 
-to = socket.gethostbyname(ips['ingress'])
+to = socket.gethostbyname(ips['capture'])
 
 for x in range(1,101):
 
@@ -28,3 +29,6 @@ for x in range(1,101):
     pkts.append(pkt)
 
 wrpcap("src.pcap",pkts)
+
+while True:
+    pass
